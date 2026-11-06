@@ -1,0 +1,13 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+ <qresource>
+  <file>localyrics.svg</file>
+  <file>Next.svg</file>
+  <file>Play.svg</file>
+  <file>Pause.svg</file>
+  <file>Repeat.svg</file>
+  <file>Repeat_One.svg</file>
+  <file>Speaker_Full.svg</file>
+  <file>Speaker_Mute.svg</file>
+ </qresource>
+</RCC>
