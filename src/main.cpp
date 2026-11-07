@@ -12,6 +12,15 @@ int main(int argc, char* argv[]) {
       color: white;
     }
 
+    QListWidget {
+      border: none;
+      outline: none;
+    }
+
+    QListWidget::item:hover {
+      background: transparent;
+    }
+
     QListWidget::item {
       border: none;
       border-radius: 5px;

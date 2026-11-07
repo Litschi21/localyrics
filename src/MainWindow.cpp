@@ -174,8 +174,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/localyrics.svg"));
 
-  songBar->move(0, height() - songBar->height());
-  songBar->raise();
+  ui->homeLayout->addWidget(songBar);
 
   connect(songBar, &SongBar::playToggled, this, [this](bool playing) {
     if (!isPlaying) return;

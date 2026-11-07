@@ -20,7 +20,7 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <layout class="QHBoxLayout" name="homeLayout">
+   <layout class="QVBoxLayout" name="homeLayout">
     <item>
      <widget class="QListWidget" name="songListWidget">
      </widget>
