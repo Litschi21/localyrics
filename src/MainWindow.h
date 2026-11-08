@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow {
   void updateSong(int row, const QString& title, const QString& artist);
   void changeVolume(float volume);
   void nextSong();
+  void pauseSong();
   void addSong(QString title, QString artist, QString songFile);
   void showSongContextMenu(const QPoint& pos);
 

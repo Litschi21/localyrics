@@ -131,6 +131,11 @@ void MainWindow::nextSong() {
   startSong(next);
 }
 
+void MainWindow::pauseSong() {
+  songBar->setPlaying(false);
+  emit songBar->playToggled(false);
+}
+
 void MainWindow::showSongContextMenu(const QPoint& pos) {
   QMenu songContextMenu(this);
   const bool hasSelection = !ui->songListWidget->selectedItems().empty();
@@ -230,6 +235,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   }
 
   loadSongs();
+  nextSong();
+  pauseSong();
 }
 
 MainWindow::~MainWindow() {
