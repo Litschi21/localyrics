@@ -2,7 +2,12 @@
 
 #include "ui_SongWidget.h"
 
-void SongWidget::setNum(QString num) { ui->songNum->setText(num); }
+void SongWidget::setNum(QString num) {
+  ui->songNum->setText(num);
+
+  int width = ui->songNum->fontMetrics().horizontalAdvance(num);
+  ui->songNum->setFixedWidth(width * NUM_GAP_MULT);
+}
 
 void SongWidget::setTitle(QString title) { ui->titleLabel->setText(title); }
 

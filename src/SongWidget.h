@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#define NUM_GAP_MULT 1.7
+
 namespace Ui {
 class SongWidget;
 }
