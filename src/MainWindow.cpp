@@ -21,7 +21,6 @@
 #include "miniaudio.h"
 #include "ui_MainWindow.h"
 
-#define VOL_CURVE 0.7f
 
 static QString libraryPath() {
   const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);

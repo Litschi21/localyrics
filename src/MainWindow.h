@@ -8,6 +8,8 @@
 #include "SongBar.h"
 #include "miniaudio.h"
 
+#define VOL_CURVE 0.7f
+
 namespace Ui {
 class MainWindow;
 }
