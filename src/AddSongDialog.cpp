@@ -8,7 +8,7 @@
 
 void AddSongDialog::chooseFile() {
   const QString file =
-      QFileDialog::getOpenFileName(this, "Choose File", "", "MP3 or FLAC Files (*.mp3 *.flac)");
+      QFileDialog::getOpenFileName(this, "Choose File", "", "MP3, FLAC, or WAV Files (*.mp3 *.flac *.wav)");
 
   auto fileInfo = QFileInfo(file);
   if (!file.isEmpty()) {

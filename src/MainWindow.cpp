@@ -169,7 +169,7 @@ void MainWindow::showSongContextMenu(const QPoint& pos) {
 
   songContextMenu.addAction("Import Multiple Files", this, [this]() {
     const QStringList files =
-        QFileDialog::getOpenFileNames(this, "Import Songs", "", "MP3 or FLAC Files (*.mp3 *.flac)");
+        QFileDialog::getOpenFileNames(this, "Import Songs", "", "MP3, FLAC, or WAV Files (*.mp3 *.flac *.wav)");
     for (const QString& f : files) addSong(QFileInfo(f).completeBaseName(), "Unknown artist", f);
     saveSongs();
   });
