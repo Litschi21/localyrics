@@ -20,6 +20,22 @@ void SongBar::setProgress(float curr, float length) {
   ui->songProgressSlider->setValue(static_cast<int>(curr * 1000));
 }
 
+QString formatTime(int sec) {
+  int min = std::round(sec / 60);
+  QString lengthText = QString::number(min) + ':' + QString("%1").arg(sec % 60, 2, 10, QChar('0'));
+  return lengthText;
+}
+
+void SongBar::setTimeProgress(int sec) {
+  QString lengthText = formatTime(sec);
+  ui->currSongTimeLabel->setText(lengthText);
+}
+
+void SongBar::setLength(int sec) {
+  QString lengthText = formatTime(sec);
+  ui->songLengthLabel->setText(lengthText);
+}
+
 float SongBar::volume() const { return ui->volumeBar->value(); }
 
 bool SongBar::repeatOne() const { return ui->repeatButton->isChecked(); }

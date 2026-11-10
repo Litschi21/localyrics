@@ -24,6 +24,8 @@ class SongBar : public QWidget {
   void setPlaying(bool playing);
   void setText(QString title, QString artist);
   void setProgress(float curr, float length);
+  void setTimeProgress(int sec);
+  void setLength(int sec);
   float volume() const;
   bool repeatOne() const;
 

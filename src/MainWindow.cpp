@@ -64,6 +64,10 @@ void MainWindow::startSong(size_t id) {
 
     songBar->setPlaying(true);
     songBar->setText(songs[id].title, songs[id].artist);
+
+    float length{};
+    ma_sound_get_length_in_seconds(&currentSong, &length);
+    songBar->setLength(length);
   } else {
     QMessageBox::critical(this, "Song Error", "Failed to start song");
   }
@@ -205,10 +209,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(posTimer, &QTimer::timeout, this, [this]() {
     if (!isPlaying) return;
 
-    float curr = 0.f, length = 0.f;
+    float curr{};
+    float length{};
     ma_sound_get_cursor_in_seconds(&currentSong, &curr);
     ma_sound_get_length_in_seconds(&currentSong, &length);
     songBar->setProgress(curr, length);
+    songBar->setTimeProgress(curr);
 
     if (!ma_sound_at_end(&currentSong)) return;
     if (songBar->repeatOne() || songs.size() <= 1) {
@@ -222,7 +228,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(songBar, &SongBar::sliderMoved, this, [this](float seconds) {
     if (!isPlaying) return;
 
-    ma_uint32 sampleRate = 0;
+    ma_uint32 sampleRate{};
     ma_sound_get_data_format(&currentSong, nullptr, nullptr, &sampleRate, nullptr, 0);
     ma_sound_seek_to_pcm_frame(&currentSong, static_cast<ma_uint64>(seconds * sampleRate));
   });
