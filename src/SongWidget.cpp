@@ -17,4 +17,4 @@ SongWidget::SongWidget(QWidget* parent) : QWidget(parent), ui(new Ui::SongWidget
   ui->setupUi(this);
 }
 
-SongWidget::~SongWidget() { delete (ui); }
+SongWidget::~SongWidget() { delete ui; }

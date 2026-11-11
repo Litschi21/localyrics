@@ -12,7 +12,9 @@
 #include <QMessageBox>
 #include <QRandomGenerator>
 #include <QStandardPaths>
+
 #include <cmath>
+#include <cstddef>
 
 #include "AddSongDialog.h"
 #include "SongBar.h"
@@ -34,20 +36,20 @@ void MainWindow::saveSongs() const {
   }
 
   QFile f(libraryPath());
-  if (f.open(QIODevice::WriteOnly)) f.write(QJsonDocument(arr).toJson());
+  if (f.open(QIODevice::WriteOnly)) { f.write(QJsonDocument(arr).toJson()); }
 }
 
 void MainWindow::loadSongs() {
   QFile f(libraryPath());
-  if (!f.open(QIODevice::ReadOnly)) return;
+  if (!f.open(QIODevice::ReadOnly)) { return; }
 
   for (const QJsonValue& v : QJsonDocument::fromJson(f.readAll()).array()) {
     const QJsonObject o = v.toObject();
-    addSong(o["title"].toString(), o["artist"].toString(), o["file"].toString());
+    this->addSong(o["title"].toString(), o["artist"].toString(), o["file"].toString());
   }
 }
 
-void MainWindow::startSong(size_t id) {
+void MainWindow::startSong(std::size_t id) {
   currentId = id;
   if (isPlaying) {
     ma_sound_uninit(&currentSong);
@@ -91,7 +93,7 @@ void MainWindow::addSong(QString title, QString artist, QString songFile) {
 
 void MainWindow::deleteSong() {
   QList<QListWidgetItem*> selectedItems = ui->songListWidget->selectedItems();
-  if (selectedItems.empty()) return;
+  if (selectedItems.empty()) { return; }
 
   auto* selected = selectedItems.first();
   songs.erase(songs.begin() + ui->songListWidget->row(selected));
@@ -101,7 +103,7 @@ void MainWindow::deleteSong() {
     if (i > ui->songListWidget->row(selected)) {
       auto* songWidget = qobject_cast<SongWidget*>(ui->songListWidget->itemWidget(item));
       songWidget->setNum(QString::number(i));
-      if (static_cast<size_t>(i) < currentId) --currentId;
+      if (static_cast<std::size_t>(i) < currentId) { --currentId; }
     }
   }
 
@@ -118,18 +120,18 @@ void MainWindow::updateSong(int row, const QString& title, const QString& artist
   widget->setTitle(title);
   widget->setArtist(artist);
 
-  if (isPlaying && static_cast<size_t>(row) == currentId) songBar->setText(title, artist);
+  if (isPlaying && static_cast<std::size_t>(row) == currentId) songBar->setText(title, artist);
   saveSongs();
 }
 
 void MainWindow::changeVolume(float volume) {
-  ma_engine_set_volume(&engine, std::pow(volume / 100.0f, VOL_CURVE));
+  ma_engine_set_volume(&engine, std::pow(volume / 100.0F, VOL_CURVE));
 }
 
 void MainWindow::nextSong() {
-  if (songs.empty()) return;
+  if (songs.empty()) { return; }
 
-  size_t next = QRandomGenerator::global()->bounded(static_cast<quint32>(songs.size()));
+  std::size_t next = QRandomGenerator::global()->bounded(static_cast<quint32>(songs.size()));
   startSong(next);
 }
 
@@ -142,7 +144,7 @@ void MainWindow::showSongContextMenu(const QPoint& pos) {
   QMenu songContextMenu(this);
   const bool hasSelection = !ui->songListWidget->selectedItems().empty();
 
-  songContextMenu.addAction("Add Song", this, [this]() {
+  songContextMenu.addAction("Add Song", this, [this] {
     auto* dialog = new AddSongDialog(this, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
@@ -151,7 +153,7 @@ void MainWindow::showSongContextMenu(const QPoint& pos) {
   auto* editSongAction = new QAction(this);
   editSongAction->setText("Edit Song");
   editSongAction->setEnabled(hasSelection);
-  connect(editSongAction, &QAction::triggered, this, [this]() {
+  connect(editSongAction, &QAction::triggered, this, [this] {
     const int row = ui->songListWidget->row(ui->songListWidget->selectedItems().first());
 
     auto* dialog = new AddSongDialog(this, this);
@@ -163,10 +165,10 @@ void MainWindow::showSongContextMenu(const QPoint& pos) {
 
   auto* deleteSongAction = new QAction(this);
   deleteSongAction->setText("Delete Song");
-  connect(deleteSongAction, &QAction::triggered, this, [this]() { deleteSong(); });
+  connect(deleteSongAction, &QAction::triggered, this, [this] { deleteSong(); });
   deleteSongAction->setEnabled(!ui->songListWidget->selectedItems().empty());
 
-  songContextMenu.addAction("Import Multiple Files", this, [this]() {
+  songContextMenu.addAction("Import Multiple Files", this, [this] {
     const QStringList files =
         QFileDialog::getOpenFileNames(this, "Import Songs", "", "MP3, FLAC, or WAV Files (*.mp3 *.flac *.wav)");
     for (const QString& f : files) addSong(QFileInfo(f).completeBaseName(), "Unknown artist", f);
@@ -183,12 +185,13 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->homeLayout->addWidget(songBar);
 
   connect(songBar, &SongBar::playToggled, this, [this](bool playing) {
-    if (!isPlaying) return;
+    if (!isPlaying) { return; }
 
-    if (playing)
+    if (playing) {
       ma_sound_start(&currentSong);
-    else
+    } else {
       ma_sound_stop(&currentSong);
+    }
   });
 
   this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -204,8 +207,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
           [this](bool muted) { changeVolume(muted ? 0.f : songBar->volume()); });
 
   posTimer = new QTimer(this);
-  connect(posTimer, &QTimer::timeout, this, [this]() {
-    if (!isPlaying) return;
+  connect(posTimer, &QTimer::timeout, this, [this] {
+    if (!isPlaying) { return; }
 
     float curr{};
     float length{};
@@ -214,7 +217,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     songBar->setProgress(curr, length);
     songBar->setTimeProgress(curr);
 
-    if (!ma_sound_at_end(&currentSong)) return;
+    if (!ma_sound_at_end(&currentSong)) { return; }
     if (songBar->repeatOne() || songs.size() <= 1) {
       startSong(currentId);
     } else {
@@ -224,14 +227,14 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   posTimer->start(250);
 
   connect(songBar, &SongBar::sliderMoved, this, [this](float seconds) {
-    if (!isPlaying) return;
+    if (!isPlaying) { return; }
 
     ma_uint32 sampleRate{};
     ma_sound_get_data_format(&currentSong, nullptr, nullptr, &sampleRate, nullptr, 0);
     ma_sound_seek_to_pcm_frame(&currentSong, static_cast<ma_uint64>(seconds * sampleRate));
   });
 
-  connect(songBar, &SongBar::nextClicked, this, [this]() { nextSong(); });
+  connect(songBar, &SongBar::nextClicked, this, [this] { nextSong(); });
 
   if (ma_engine_init(nullptr, &engine) != MA_SUCCESS) {
     QMessageBox::critical(this, "Audio Engine Error", "Failed to initialized Audio Engine");
@@ -245,7 +248,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow() {
-  if (isPlaying) ma_sound_uninit(&currentSong);
+  if (isPlaying) { ma_sound_uninit(&currentSong); }
 
   ma_engine_uninit(&engine);
   delete ui;

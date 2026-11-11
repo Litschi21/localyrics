@@ -15,7 +15,7 @@ void SongBar::setText(QString title, QString artist) {
 }
 
 void SongBar::setProgress(float curr, float length) {
-  if (ui->songProgressSlider->isSliderDown()) return;
+  if (ui->songProgressSlider->isSliderDown()) { return; }
   ui->songProgressSlider->setMaximum(static_cast<int>(length * 1000));
   ui->songProgressSlider->setValue(static_cast<int>(curr * 1000));
 }
@@ -51,8 +51,8 @@ SongBar::SongBar(QWidget* parent) : QWidget(parent), ui(new Ui::SongBar) {
   connect(ui->volumeBar, &QSlider::valueChanged, this, &SongBar::volumeChanged);
   connect(ui->muteButton, &QPushButton::toggled, this, &SongBar::muteToggled);
   connect(ui->songProgressSlider, &QSlider::sliderReleased, this,
-          [this]() { emit sliderMoved(ui->songProgressSlider->value() / 1'000.f); });
+          [this] { emit sliderMoved(ui->songProgressSlider->value() / 1'000.F); });
   connect(ui->nextButton, &QPushButton::clicked, this, &SongBar::nextClicked);
 }
 
-SongBar::~SongBar() { delete (ui); }
+SongBar::~SongBar() { delete ui; }

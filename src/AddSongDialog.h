@@ -22,7 +22,7 @@ class AddSongDialog : public QDialog {
  private:
   Ui::AddSongDialog* ui;
   MainWindow* mainWin;
-  QString songFile;
+  QString songFile{};
   int editRow = -1;
 };
 

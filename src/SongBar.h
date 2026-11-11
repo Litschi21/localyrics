@@ -26,8 +26,8 @@ class SongBar : public QWidget {
   void setProgress(float curr, float length);
   void setTimeProgress(int sec);
   void setLength(int sec);
-  float volume() const;
-  bool repeatOne() const;
+  [[nodiscard]] float volume() const;
+  [[nodiscard]] bool repeatOne() const;
 
  private:
   Ui::SongBar* ui;

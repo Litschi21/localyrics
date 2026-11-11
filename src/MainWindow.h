@@ -15,9 +15,9 @@ class MainWindow;
 }
 
 struct Song {
-  QString title;
-  QString artist;
-  QString songFile;
+  QString title{};
+  QString artist{};
+  QString songFile{};
 };
 
 class MainWindow : public QMainWindow {
@@ -41,13 +41,13 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow* ui;
-  ma_engine engine;
+  ma_engine engine{};
   SongBar* songBar = new SongBar(this);
   QTimer* posTimer = nullptr;
   size_t currentId = 0;
 
   bool isPlaying = false;
-  ma_sound currentSong;
+  ma_sound currentSong{};
   std::vector<Song> songs{};
 };
 

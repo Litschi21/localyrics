@@ -37,13 +37,14 @@ AddSongDialog::AddSongDialog(MainWindow* mainWindow, QWidget* parent)
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/localyrics.svg"));
 
-  connect(ui->fileButton, &QPushButton::clicked, this, [this]() { chooseFile(); });
+  connect(ui->fileButton, &QPushButton::clicked, this, [this] { chooseFile(); });
 
-  connect(ui->addButton, &QPushButton::clicked, this, [this]() {
-    if (editRow >= 0)
+  connect(ui->addButton, &QPushButton::clicked, this, [this] {
+    if (editRow >= 0) {
       mainWin->updateSong(editRow, ui->titleEdit->text(), ui->artistEdit->text());
-    else
+    } else {
       mainWin->addSong(ui->titleEdit->text(), ui->artistEdit->text(), songFile);
+    }
 
     this->close();
   });
