@@ -237,6 +237,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   if (ma_engine_init(nullptr, &engine) != MA_SUCCESS) {
     QMessageBox::critical(this, "Audio Engine Error", "Failed to initialized Audio Engine");
+    QMetaObject::invokeMethod(qApp, &QCoreApplication::quit, Qt::QueuedConnection);
+    return;
   }
 
   loadSongs();
