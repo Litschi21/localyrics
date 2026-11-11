@@ -15,6 +15,9 @@
   <property name="windowTitle">
    <string>Add Song</string>
   </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="dialogLayout">
    <item>
     <widget class="QLineEdit" name="titleEdit">
