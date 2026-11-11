@@ -7,7 +7,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QLabel>
 #include <QListWidget>
 #include <QMenu>
 #include <QMessageBox>
@@ -171,7 +170,6 @@ void MainWindow::showSongContextMenu(const QPoint& pos) {
     const QStringList files =
         QFileDialog::getOpenFileNames(this, "Import Songs", "", "MP3, FLAC, or WAV Files (*.mp3 *.flac *.wav)");
     for (const QString& f : files) addSong(QFileInfo(f).completeBaseName(), "Unknown artist", f);
-    saveSongs();
   });
 
   songContextMenu.addAction(deleteSongAction);

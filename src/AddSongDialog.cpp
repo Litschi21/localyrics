@@ -1,6 +1,5 @@
 #include "AddSongDialog.h"
 
-#include <QDialog>
 #include <QFileDialog>
 
 #include "MainWindow.h"
@@ -40,7 +39,7 @@ AddSongDialog::AddSongDialog(MainWindow* mainWindow, QWidget* parent)
 
   connect(ui->fileButton, &QPushButton::clicked, this, [this]() { chooseFile(); });
 
-  connect(ui->addButton, &QPushButton::clicked, this, [mainWindow, this]() {
+  connect(ui->addButton, &QPushButton::clicked, this, [this]() {
     if (editRow >= 0)
       mainWin->updateSong(editRow, ui->titleEdit->text(), ui->artistEdit->text());
     else
